@@ -1,0 +1,26 @@
+{
+  "name": "task_manager",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "hanieh",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "cross-env NODE_ENV=development nodemon server.js",
+    "prod": "cross-env NODE_ENV=production nodemon server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongodb": "^7.0.0",
+    "mongoose": "^9.1.1",
+    "morgan": "^1.10.1",
+    "validator": "^13.15.26"
+  },
+  "devDependencies": {
+    "cross-env": "^10.1.0"
+  }
+}

@@ -37,7 +37,8 @@ export const login = catchAsync(async (req, res, next) => {
     token,
   });
 });
-export const protectRoutes = catchAsync(async (req, res, next) => {
+
+export const protect = catchAsync(async (req, res, next) => {
   let token;
   if (
     req.headers.authorization &&
@@ -46,16 +47,16 @@ export const protectRoutes = catchAsync(async (req, res, next) => {
     token = req.headers.authorization.split(" ")[1];
   }
   if (!token) {
-    return next(new AppErrors("please first login", 401));
+    return next(
+      new AppErrors("You are not login ,please login to get access", 401)
+    );
   }
   const decoded = await promisify(jwt.verify)(token, process.env.SECRET_JWT);
-  console.log(decoded);
   const freshUser = await UserModel.findById(decoded.id);
-  if (!freshUser)
-    return new AppErrors(
-      "The user belonging to this token does no longer exist ",
-      401
-    );
-    freshUser.changedPassAfterLogin(decoded.iat)
+  console.log(freshUser);
+  if (!freshUser) {
+    return new AppErrors("The user belonging to this token does no exist", 401);
+  }
+  freshUser.changedPasswordAfter(decoded.iat);
   next();
 });

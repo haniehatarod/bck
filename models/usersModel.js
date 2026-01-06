@@ -57,9 +57,9 @@ userSchema.pre("save", async function () {
 userSchema.methods.correctPassword = async function (newPassword, oldPassword) {
   return await bcrypt.compare(newPassword, oldPassword);
 };
-userSchema.methods.changedPassAfterLogin = async function (jwtTimestamp) {
+userSchema.methods.changedPasswordAfter = function (jwtTimestamp) {
   if (this.passwordChangedAt) {
-    console.log(this.passwordChangedAt, jwtTimestamp);
+    console.log(this);
   }
   return false;
 };

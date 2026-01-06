@@ -1,11 +1,11 @@
 import dotenv from "dotenv";
 import app from "./app.js";
 import mongoose from "mongoose";
+
 process.on("uncaughtException", (err) => {
   console.log(err.name, err.message);
   process.exit(1);
 });
-
 dotenv.config({ path: "./config.env" });
 console.log(`enviroment: ${process.env.NODE_ENV}`);
 const DB = process.env.DATA_BASE.replace(

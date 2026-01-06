@@ -5,6 +5,7 @@ import { userRouter } from "./routes/userRoutes.js";
 import { teamRouter } from "./routes/teamRoutes.js";
 import { taskRouter } from "./routes/taskRoutes.js";
 import errorController from "./controllers/errorController.js";
+import AppErrors from "./utils/appError.js";
 const app = express();
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
@@ -22,7 +23,7 @@ app.use("/api/v1/users", userRouter);
 app.use("/api/v1/teams", teamRouter);
 app.use("/api/v1/tasks", taskRouter);
 app.use((req, res, next) => {
-  const err = new AppError(`Not Found this ${req.originalUrl}`, 404);
+  const err = new AppErrors(`Not Found this ${req.originalUrl}`, 404);
 
   next(err);
 });

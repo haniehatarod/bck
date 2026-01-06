@@ -1,8 +1,15 @@
-export const getAllUsers = (req, res) => {
+import UsersModel from "../models/usersModel.js";
+import catchAsync from "../utils/catchAsync.js";
+
+export const getAllUsers = catchAsync(async (req, res, next) => {
+  const users = await UsersModel.find();
   res.status(200).json({
-    message: "done",
+    status: "success",
+    data: {
+      users,
+    },
   });
-};
+});
 export const createUser = (req, res) => {};
 export const getUser = (req, res) => {};
 export const deleteUser = (req, res) => {};

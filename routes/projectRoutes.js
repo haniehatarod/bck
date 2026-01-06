@@ -7,11 +7,15 @@ import {
   createProject,
   getProjectStats,
 } from "../controllers/projectController.js";
+import { protectRoutes } from "../controllers/authController.js";
 export const projectRouter = express.Router();
-projectRouter.route("/projects_stats").get(getProjectStats);
-projectRouter.route("/").get(getAllProjects).post(createProject);
+projectRouter.route("/projects_stats").get(protectRoutes, getProjectStats);
+projectRouter
+  .route("/")
+  .get(protectRoutes, getAllProjects)
+  .post(protectRoutes, createProject);
 projectRouter
   .route("/:id")
-  .get(getProject)
-  .patch(updateProject)
-  .delete(deleteProject);
+  .get(protectRoutes, getProject)
+  .patch(protectRoutes, updateProject)
+  .delete(protectRoutes, deleteProject);

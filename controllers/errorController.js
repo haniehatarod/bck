@@ -14,10 +14,9 @@ const sendErrorProductionInviroment = (res, err) => {
       message: err.message,
     });
   } else {
-    console.log("Error", err);
     res.status(500).json({
-      status: "Error",
-      message: "Somthing went wrong",
+      status: "fail",
+      message: err.message,
     });
   }
 };
@@ -38,7 +37,12 @@ const handleValidationError = (err) => {
   const message = messages.join(". ");
   return new AppError(message, 400);
 };
-
+const handleJWTError = (err) => {
+  return new AppError("Invalid token,please login again", 401);
+};
+const handleExpiredJWT = (err) => {
+  return new AppError("Your token has expired,please login again", 401);
+};
 export default (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || "Error";
@@ -49,6 +53,8 @@ export default (err, req, res, next) => {
     if (err.name === "CastError") error = handleCastError(error);
     if (err.code === 11000) error = handleDuplicateError(error);
     if (err.name === "ValidationError") error = handleValidationError(error);
+    if (err.name === "JsonWebTokenError") error = handleJWTError(error);
+    if (err.name === "TokenExpiredError") error = handleExpiredJWT(error);
     sendErrorProductionInviroment(res, error);
   }
 };

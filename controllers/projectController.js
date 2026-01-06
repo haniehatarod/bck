@@ -1,5 +1,6 @@
 import ProjectModel from "../models/projectModel.js";
 import ApiFeatures from "../utils/apiFeatures.js";
+import AppErrors from "../utils/appError.js";
 import AppError from "../utils/appError.js";
 import catchAsync from "../utils/catchAsync.js";
 export const getAllProjects = catchAsync(async (req, res, next) => {
@@ -28,7 +29,7 @@ export const createProject = catchAsync(async (req, res, next) => {
 export const getProject = catchAsync(async (req, res, next) => {
   const project = await ProjectModel.findById(req.params.id);
   if (!project) {
-    return next(new AppError(`Not Found this ID`, 404));
+    return next(new AppErrors(`Not Found this ID`, 404));
   }
   res.status(200).json({
     status: "success",

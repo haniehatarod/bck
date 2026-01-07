@@ -38,7 +38,8 @@ export const login = catchAsync(async (req, res, next) => {
     token,
   });
 });
-export const protectRoutes = catchAsync(async (req, res, next) => {
+
+export const protect = catchAsync(async (req, res, next) => {
   let token;
   if (
     req.headers.authorization &&
@@ -47,7 +48,9 @@ export const protectRoutes = catchAsync(async (req, res, next) => {
     token = req.headers.authorization.split(" ")[1];
   }
   if (!token) {
-    return next(new AppErrors("please first login", 401));
+    return next(
+      new AppErrors("You are not login ,please login to get access", 401)
+    );
   }
   const decoded = await promisify(jwt.verify)(token, process.env.SECRET_JWT);
   const currentUser = await UserModel.findById(decoded.id);
@@ -60,5 +63,6 @@ export const protectRoutes = catchAsync(async (req, res, next) => {
     return next(new AppErrors("User recently changed password! Please log in again.", 401));
   }
   req.user = currentUser;
+
   next();
 });

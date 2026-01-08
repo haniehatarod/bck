@@ -7,12 +7,15 @@ import {
   createProject,
   getProjectStats,
 } from "../controllers/projectController.js";
-import { protect } from "../controllers/authController.js";
+import { protect, restrict } from "../controllers/authController.js";
 export const projectRouter = express.Router();
 projectRouter.route("/projects_stats").get(getProjectStats);
-projectRouter.route("/").get(protect, getAllProjects).post(createProject);
+projectRouter
+  .route("/")
+  .get(protect, restrict(["admin"]), getAllProjects)
+  .post(protect, restrict(["admin"]), createProject);
 projectRouter
   .route("/:id")
-  .get(getProject)
-  .patch(updateProject)
-  .delete(deleteProject);
+  .get(protect, restrict(["admin"]), getProject)
+  .patch(protect, restrict(["admin"]), updateProject)
+  .delete(protect, restrict(["admin"]), deleteProject);

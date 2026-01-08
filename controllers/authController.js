@@ -59,10 +59,22 @@ export const protect = catchAsync(async (req, res, next) => {
       new AppErrors("The user belonging to this token no longer", 401)
     );
   }
-  if(currentUser.changedPassAfterLogin(decoded.iat)){
-    return next(new AppErrors("User recently changed password! Please log in again.", 401));
+  if (currentUser.changedPassAfterLogin(decoded.iat)) {
+    return next(
+      new AppErrors("User recently changed password! Please log in again.", 401)
+    );
   }
   req.user = currentUser;
 
   next();
 });
+export const restrict = (...roles) => {
+  return catchAsync(async (req, res, next) => {
+    if (!roles.includes(req.user.role || !req.user.role)) {
+      return next(
+        new AppErrors("you do not have permission to perform this action", 403)
+      );
+    }
+    next();
+  });
+};
